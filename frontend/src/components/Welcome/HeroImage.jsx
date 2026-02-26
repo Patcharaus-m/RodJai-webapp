@@ -1,6 +1,6 @@
 // src/components/HeroImage.jsx
 // นำเข้ารูปภาพจากโฟลเดอร์ assets
-import rodjaiLogo from '../assets/RodJaiLogo.webp';
+import rodjaiLogo from '../../assets/RodJaiLogo.webp';
 
 export default function HeroImage() {
   return (

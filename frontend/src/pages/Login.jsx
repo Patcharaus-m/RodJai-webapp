@@ -1,19 +1,21 @@
-// src/pages/Register.jsx
+// src/pages/Login.jsx
 import React from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-// Import Components ที่เราเพิ่งสร้าง
+// ดึง Component เดิมที่เคยสร้างไว้มาใช้งานได้เลย 
+// (ถ้าโฟลเดอร์ชื่อ Register ก็อ้างอิงตามนี้ได้เลยครับ หรือถ้าเปลี่ยนชื่อโฟลเดอร์ก็แก้ Path นิดหน่อย)
 import IconInput from '../components/Register/IconInput';
 import SocialButton from '../components/Register/SocialButton';
 import Divider from '../components/Register/Divider';
 
-export default function Register() {
+export default function Login() {
   const navigate = useNavigate();
 
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center py-5" style={{ background: 'linear-gradient(to bottom, #f8faf4, #f4f7ef)' }}>
       
+      {/* กล่อง Card สีขาวแบบเดียวกับหน้า Register */}
       <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm w-100 border-0 my-auto" style={{ maxWidth: '420px' }}>
         
         {/* Header Section */}
@@ -21,20 +23,20 @@ export default function Register() {
           <div className="d-inline-flex justify-content-center align-items-center rounded-circle bg-light p-3 mb-3" style={{ color: '#a3d665' }}>
             <i className="bi bi-tractor" style={{ fontSize: '1.5rem' }}></i>
           </div>
-          <h2 className="fw-bold text-dark">Create your account</h2>
-          <p className="text-muted">Join the smart farming revolution.</p>
+          <h2 className="fw-bold text-dark">Welcome Back!</h2>
+          <p className="text-muted">Login to manage your farm.</p>
         </div>
 
         {/* Social Buttons */}
         <SocialButton 
           icon="bi-line" 
-          text="Sign up with LINE" 
+          text="Login with Line" 
           bgColor="#00C300" 
           textColor="white" 
         />
         <SocialButton 
           icon="bi-google" 
-          text="Sign up with Google" 
+          text="Login with Google" 
           variant="outline-secondary" 
           iconColor="text-danger" 
         />
@@ -43,34 +45,28 @@ export default function Register() {
 
         {/* Form Section */}
         <Form>
-          {/* เรียกใช้ IconInput ทำให้โค้ดสั้นลงมาก */}
-          <IconInput icon="bi-person-fill" placeholder="Username" />
-          <IconInput icon="bi-envelope-fill" type="email" placeholder="name@example.com" />
-          <IconInput icon="bi-lock-fill" type="password" placeholder="Create Password" />
-          <IconInput icon="bi-lock-fill" type="password" placeholder="Confirm Password" />
-
-          {/* Terms & Conditions */}
-          <Form.Group className="mb-4 d-flex">
-            <Form.Check type="checkbox" id="terms-check" className="me-2" />
-            <Form.Label htmlFor="terms-check" className="text-muted" style={{ fontSize: '0.85rem' }}>
-              I agree to the <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Terms of Service</span> & <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Privacy Policy</span>
-            </Form.Label>
-          </Form.Group>
+          {/* ใช้ IconInput ตัวเดิม แต่เปลี่ยน Placeholder เป็นของ Login */}
+          <IconInput icon="bi-envelope-fill" placeholder="Username or Email" />
+          <IconInput icon="bi-lock-fill" type="password" placeholder="Password" />
 
           {/* Submit Button */}
           <Button 
-            className="w-100 py-3 rounded-pill fw-bold shadow-sm" 
+            className="w-100 py-3 rounded-pill fw-bold shadow-sm mt-2" 
             style={{ backgroundColor: '#a3d665', border: 'none', fontSize: '1.1rem', color: '#1c2434' }}
           >
-            Sign Up →
+            Login →
           </Button>
         </Form>
 
         {/* Footer */}
         <div className="text-center mt-4 text-muted" style={{ fontSize: '0.9rem' }}>
-          Already have an account?{' '}
-          <span className="fw-bold" style={{ color: '#a3d665', cursor: 'pointer' }} onClick={() => navigate('/login')}>
-            Log In
+          Don't have an account?{' '}
+          <span 
+            className="fw-bold" 
+            style={{ color: '#a3d665', cursor: 'pointer' }} 
+            onClick={() => navigate('/register')}
+          >
+            Sign Up
           </span>
         </div>
 

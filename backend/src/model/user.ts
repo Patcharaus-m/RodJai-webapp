@@ -1,19 +1,22 @@
-import mongoose from "mongoose";
+// src/models/User.ts
+import { Schema, model } from 'mongoose';
+import { IUser } from '../types/user'; // Import interface เข้ามาใช้
 
-const UserSchema = new mongoose.Schema(
-  {
-    email: { type: String, required: true, unique: true }, // อีเมล [cite: 39]
-    username: { type: String, required: true, unique: true }, // ชื่อ [cite: 36]
-    password: { type: String, required: true }, // รหัส [cite: 37]
-    line_user_id: { type: String, unique: true }, // line user id [cite: 41]
-    subscription: { type: String }, // subscription [cite: 43]
-    created_at: { type: Date, default: Date.now }, // created at [cite: 44]
-    terms_agreement_version: { type: String}, // terms agreement version [cite: 45]
-    terms_agreement_agreed_at: { type: Date},
-    terms_agreement_consent: { type: Boolean},
-    profile_image: { type: String },
-  },
-  { timestamps: true, versionKey: false }
-);
+const userSchema = new Schema<IUser>({
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password_hash: { type: String, required: true },
+  line_user_id: { type: String, default: null },
+  subscription: { type: String, enum: ['free', 'premium'], default: 'free' },
+  profile_image: { type: String, default: "" },
+  terms_agreement: {
+    version: { type: String, default: "v1.0" },
+    agreed_at: { type: Date, default: Date.now },
+    ip_address: { type: String },
+    consent: { type: Boolean, required: true }
+  }
+}, { 
+  timestamps: { createdAt: 'created_at', updatedAt: false } 
+});
 
-export default mongoose.model("User", UserSchema);
+export const User = model<IUser>('User', userSchema);
