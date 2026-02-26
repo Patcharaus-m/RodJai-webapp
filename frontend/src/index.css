@@ -1,68 +1,127 @@
+/* Custom Theme Variables */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary-green: #a3d665;
+  --primary-green-hover: #8fbe58;
+  --dark-text: #1c2434;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --bg-gradient: linear-gradient(180deg, rgba(232, 245, 233, 0.5) 0%, rgba(248, 250, 252, 1) 100%);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-gradient);
+  min-height: 100-vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Typography Helpers */
+.rodjai-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1e293b;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+.rodjai-subtitle {
+  font-size: 1.125rem;
+  color: var(--slate-500);
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  line-height: 1.6;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Button Custom Styles */
+.btn-rodjai-primary {
+  background-color: var(--primary-green) !important;
+  border: none !important;
+  color: var(--dark-text) !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  padding: 1rem 2rem !important;
+  border-radius: 30px !important;
+  box-shadow: 0 4px 14px rgba(163, 214, 101, 0.3) !important;
+  transition: all 0.2s ease-in-out !important;
+  width: 100%;
+}
+
+.btn-rodjai-primary:hover {
+  background-color: var(--primary-green-hover) !important;
+  transform: translateY(-1px);
+}
+
+.btn-rodjai-outline {
+  background-color: white !important;
+  border: 2px solid #f1f5f9 !important;
+  color: var(--dark-text) !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  padding: 1rem 2rem !important;
+  border-radius: 30px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease-in-out !important;
+  width: 100%;
+}
+
+.btn-rodjai-outline:hover {
+  background-color: #f8fafc !important;
+  transform: translateY(-1px);
+}
+
+/* Layout Helpers */
+.welcome-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+}
+
+.hero-image-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+}
+
+.hero-main-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 6px solid white;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  background-color: #f1f5f9;
+  overflow: hidden;
+}
+
+.icon-badge {
+  position: absolute;
+  padding: 0.625rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaf-icon {
+  top: 1rem;
+  left: -0.75rem;
+  background-color: var(--primary-green);
+  color: white;
+}
+
+.signal-icon {
+  bottom: 0.5rem;
+  right: -1rem;
+  background-color: white;
+  color: var(--primary-green);
+  padding: 0.875rem;
 }
