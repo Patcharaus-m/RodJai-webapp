@@ -1,7 +1,8 @@
 // src/pages/Register.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Import Components ที่เราเพิ่งสร้าง
 import IconInput from '../components/Register/IconInput';
@@ -10,6 +11,51 @@ import Divider from '../components/Register/Divider';
 
 export default function Register() {
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    consent: false
+  });
+
+  // 2. ฟังก์ชันจัดการการเปลี่ยนแปลงค่าใน Input
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  // 3. ฟังก์ชันส่งข้อมูลไปยัง Backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // ตรวจสอบความถูกต้องเบื้องต้น
+    if (formData.password !== formData.confirmPassword) {
+      return alert("Passwords do not match!");
+    }
+
+    if (!formData.consent) {
+        return alert("Please agree to the Terms of Service.");
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/register', {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        consent: formData.consent // ส่งค่าการยินยอมตาม Schema
+      });
+
+      alert("Registration Successful!");
+      navigate('/login'); // เปลี่ยนหน้าไป Login
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    }
+  };
 
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center py-5" style={{ background: 'linear-gradient(to bottom, #f8faf4, #f4f7ef)' }}>
@@ -42,23 +88,57 @@ export default function Register() {
         <Divider text="OR CONTINUE WITH EMAIL" />
 
         {/* Form Section */}
-        <Form>
-          {/* เรียกใช้ IconInput ทำให้โค้ดสั้นลงมาก */}
-          <IconInput icon="bi-person-fill" placeholder="Username" />
-          <IconInput icon="bi-envelope-fill" type="email" placeholder="name@example.com" />
-          <IconInput icon="bi-lock-fill" type="password" placeholder="Create Password" />
-          <IconInput icon="bi-lock-fill" type="password" placeholder="Confirm Password" />
+        <Form onSubmit={handleSubmit}> 
+            <IconInput 
+                icon="bi-person-fill" 
+                placeholder="Username" 
+                name="username" 
+                value={formData.username} 
+                onChange={handleChange} 
+            />
+            <IconInput 
+                icon="bi-envelope-fill" 
+                type="email" 
+                placeholder="name@example.com" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange} 
+            />
+            <IconInput 
+                icon="bi-lock-fill" 
+                type="password" 
+                placeholder="Create Password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+            />
+            <IconInput 
+                icon="bi-lock-fill" 
+                type="password" 
+                placeholder="Confirm Password" 
+                name="confirmPassword" 
+                value={formData.confirmPassword} 
+                onChange={handleChange} 
+            />
 
-          {/* Terms & Conditions */}
-          <Form.Group className="mb-4 d-flex">
-            <Form.Check type="checkbox" id="terms-check" className="me-2" />
-            <Form.Label htmlFor="terms-check" className="text-muted" style={{ fontSize: '0.85rem' }}>
-              I agree to the <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Terms of Service</span> & <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Privacy Policy</span>
-            </Form.Label>
-          </Form.Group>
+            {/* Terms & Conditions */}
+            <Form.Group className="mb-4 d-flex">
+                <Form.Check 
+                    type="checkbox" 
+                    id="terms-check" 
+                    className="me-2" 
+                    name="consent" 
+                    checked={formData.consent} 
+                    onChange={handleChange} 
+                />
+                <Form.Label htmlFor="terms-check" className="text-muted" style={{ fontSize: '0.85rem' }}>
+                    I agree to the <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Terms of Service</span> & <span className="text-success text-decoration-underline" style={{ cursor: 'pointer' }}>Privacy Policy</span>
+                </Form.Label>
+            </Form.Group>
 
           {/* Submit Button */}
           <Button 
+            type="submit"
             className="w-100 py-3 rounded-pill fw-bold shadow-sm" 
             style={{ backgroundColor: '#a3d665', border: 'none', fontSize: '1.1rem', color: '#1c2434' }}
           >

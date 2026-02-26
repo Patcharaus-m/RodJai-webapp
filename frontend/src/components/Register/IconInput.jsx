@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { InputGroup, Form } from 'react-bootstrap';
 
-export default function IconInput({ icon, type = 'text', placeholder }) {
+// 1. รับ props name, value, และ onChange เพิ่มเข้ามาตรงนี้ครับ
+export default function IconInput({ icon, type = 'text', placeholder, name, value, onChange }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === 'password';
   const currentType = isPassword && showPassword ? 'text' : type;
@@ -17,6 +18,9 @@ export default function IconInput({ icon, type = 'text', placeholder }) {
       {/* ช่องกรอกข้อมูล */}
       <Form.Control 
         type={currentType} 
+        name={name}           // 2. เอาสายไฟ name มาเสียบ
+        value={value}         // 3. เอาสายไฟ value มาเสียบ
+        onChange={onChange}   // 4. เอาสายไฟ onChange มาเสียบ
         placeholder={placeholder} 
         className={`bg-light py-2 ${isPassword ? 'border-x-0' : 'border-start-0 rounded-end-pill'}`} 
       />
