@@ -1,7 +1,7 @@
 // src/pages/Welcome.jsx
-import HeroImage from '../components/HeroImage';
-import Button from '../components/Button';
-import { Title, Subtitle } from '../components/Typography';
+import HeroImage from '../components/Welcome/HeroImage';
+import Button from '../components/Welcome/Button';
+import { Title, Subtitle } from '../components/Welcome/Typography';
 import { useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
