@@ -38,6 +38,38 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.username.trim()) {
+      return showAlert("Please enter your username", "error");
+    }
+
+    if (formData.username.trim().length < 3){
+      return showAlert("Username must be at least 3 characters long.", "error");
+    }
+
+    if (formData.username.trim().length > 30){
+      return showAlert("Username mu st be at most 30 characters long.", "error");
+    }
+
+    if (!formData.email.trim()) {
+      return showAlert("Please enter your email.", "error");
+    }
+
+    if (!formData.password.trim()) {
+      return showAlert("Please enter your password.", "error");
+    }
+
+    if (formData.password.trim().length < 6){
+      return showAlert("Password must be at least 6 characters long.", "error");
+    }
+
+    if (formData.password.trim().length > 30){
+      return showAlert("Password must be at most 30 characters long.", "error");
+    }
+
+    if (!formData.confirmPassword.trim()) {
+      return showAlert("Please enter your confirm password.",  "error");
+    }
+
     // ตรวจสอบความถูกต้องเบื้องต้น
     if (formData.password !== formData.confirmPassword) {
       return showAlert("Passwords do not match!", "error");
@@ -46,6 +78,8 @@ export default function Register() {
     if (!formData.consent) {
         return showAlert("Please agree to the Terms of Service.", "warning");
     }
+
+    
 
     try {
       await axios.post('http://localhost:3000/api/auth/register', {
@@ -56,9 +90,26 @@ export default function Register() {
       });
 
       showAlert("Registration Successful!", "success");
-      navigate('/login'); // เปลี่ยนหน้าไป Login
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
-      showAlert(err.response?.data?.message || "Registration failed", "error");
+      
+      const serverError = err.response?.data?.error;
+
+      if (serverError === "Username or Email already exists") {
+      showAlert("Username or Email already exists", "error");
+    } else {
+      showAlert(serverError || "Registration failed", "error");
+    }
+
+      if (err.response && err.response.data){
+        const errorMassage = err.response.data.error;
+
+        showAlert(errorMassage, "error");
+      } else {
+        showAlert("Something went wrong. Please try again.", "error")
+      }
     }
   };
 
