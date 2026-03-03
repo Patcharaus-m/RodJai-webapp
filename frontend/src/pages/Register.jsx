@@ -8,6 +8,7 @@ import axios from 'axios';
 import IconInput from '../components/Register/IconInput';
 import SocialButton from '../components/Register/SocialButton';
 import Divider from '../components/Register/Divider';
+import AlertBox from '../components/AlertBox';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,6 +20,10 @@ export default function Register() {
     confirmPassword: '',
     consent: false
   });
+
+  const [alertData, setAlertData] = useState({ show: false, message: '', type: 'info' });
+  const showAlert = (message, type = 'info') => setAlertData({ show: true, message, type });
+  const closeAlert = () => setAlertData(prev => ({ ...prev, show: false }));
 
   // 2. ฟังก์ชันจัดการการเปลี่ยนแปลงค่าใน Input
   const handleChange = (e) => {
@@ -35,30 +40,31 @@ export default function Register() {
 
     // ตรวจสอบความถูกต้องเบื้องต้น
     if (formData.password !== formData.confirmPassword) {
-      return alert("Passwords do not match!");
+      return showAlert("Passwords do not match!", "error");
     }
 
     if (!formData.consent) {
-        return alert("Please agree to the Terms of Service.");
+        return showAlert("Please agree to the Terms of Service.", "warning");
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', {
+      await axios.post('http://localhost:3000/api/auth/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password,
         consent: formData.consent // ส่งค่าการยินยอมตาม Schema
       });
 
-      alert("Registration Successful!");
+      showAlert("Registration Successful!", "success");
       navigate('/login'); // เปลี่ยนหน้าไป Login
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      showAlert(err.response?.data?.message || "Registration failed", "error");
     }
   };
 
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center py-5" style={{ background: 'linear-gradient(to bottom, #f8faf4, #f4f7ef)' }}>
+      <AlertBox message={alertData.message} type={alertData.type} show={alertData.show} onClose={closeAlert} />
       
       <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm w-100 border-0 my-auto" style={{ maxWidth: '420px' }}>
         

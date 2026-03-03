@@ -8,6 +8,7 @@ import axios from 'axios';
 import IconInput from '../components/Register/IconInput';
 import SocialButton from '../components/Register/SocialButton';
 import Divider from '../components/Register/Divider';
+import AlertBox from '../components/AlertBox';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,6 +18,10 @@ export default function Login() {
     email: '',
     password: ''
   });
+
+  const [alertData, setAlertData] = useState({ show: false, message: '', type: 'info' });
+  const showAlert = (message, type = 'info') => setAlertData({ show: true, message, type });
+  const closeAlert = () => setAlertData(prev => ({ ...prev, show: false }));
 
   // 2. ฟังก์ชันจัดการการพิมพ์
   const handleChange = (e) => {
@@ -30,7 +35,7 @@ export default function Login() {
   // 3. ฟังก์ชันส่งข้อมูลไป Login
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    navigate('/home');
     try {
       // ยิง API ไปที่ Path Login
       const response = await axios.post('http://localhost:3000/api/auth/login', {
@@ -47,21 +52,22 @@ export default function Login() {
         localStorage.setItem('token', token);
         
         // แสดงชื่อผู้ใช้ตอน Login สำเร็จ (ดึงมาจาก user.username)
-        alert(`Login Successful! Welcome back, ${user?.username || 'User'}`);
+        showAlert(`Login Successful! Welcome back, ${user?.username || 'User'}`, 'success');
         
         // TODO: Login เสร็จแล้วให้ไปหน้าหลัก (ปลดคอมเมนต์เมื่อมีหน้า Dashboard/Todo แล้ว)
         // navigate('/dashboard'); 
       } else {
-        alert("Login failed: No token received");
+        showAlert("Login failed: No token received", 'error');
       }
 
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed. Please check your credentials.");
+      showAlert(err.response?.data?.message || "Login failed. Please check your credentials.", 'error');
     }
   };
 
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center py-5" style={{ background: 'linear-gradient(to bottom, #f8faf4, #f4f7ef)' }}>
+      <AlertBox message={alertData.message} type={alertData.type} show={alertData.show} onClose={closeAlert} />
       
       <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm w-100 border-0 my-auto" style={{ maxWidth: '420px' }}>
         
