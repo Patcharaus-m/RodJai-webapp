@@ -32,10 +32,29 @@ export default function Login() {
     }));
   };
 
+  const handleLineLogin = () => {
+  const client_id = '2009308819'; // จากรูป image_538d9d.png [cite: 2026-03-04]
+  const redirect_uri = encodeURIComponent('http://localhost:3000/api/auth/line/callback');
+  const state = 'random_string_123'; // กันการโจมตีแบบ CSRF
+  
+  const lineUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}&scope=profile%20openid%20email`;
+  
+  window.location.href = lineUrl; // พายูสเซอร์ไปหน้า Login ของ LINE
+};
+
   // 3. ฟังก์ชันส่งข้อมูลไป Login
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/home');
+
+    // ตรวจสอบว่ากรอกข้อมูลครบหรือไม่
+    if (!formData.email.trim()) {
+      return showAlert("Please enter your email.", "error");
+    }
+
+    if (!formData.password.trim()) {
+      return showAlert("Please enter your password.", "error");
+    }
+
     try {
       // ยิง API ไปที่ Path Login
       const response = await axios.post('http://localhost:3000/api/auth/login', {
@@ -54,14 +73,17 @@ export default function Login() {
         // แสดงชื่อผู้ใช้ตอน Login สำเร็จ (ดึงมาจาก user.username)
         showAlert(`Login Successful! Welcome back, ${user?.username || 'User'}`, 'success');
         
-        // TODO: Login เสร็จแล้วให้ไปหน้าหลัก (ปลดคอมเมนต์เมื่อมีหน้า Dashboard/Todo แล้ว)
-        // navigate('/dashboard'); 
+        // Login สำเร็จแล้วไปหน้า Home
+        setTimeout(() => {
+          navigate('/home');
+        }, 1500);
       } else {
         showAlert("Login failed: No token received", 'error');
       }
 
     } catch (err) {
-      showAlert(err.response?.data?.message || "Login failed. Please check your credentials.", 'error');
+      const serverError = err.response?.data?.error;
+      showAlert(serverError || "Login failed. Please check your credentials.", 'error');
     }
   };
 
@@ -81,7 +103,7 @@ export default function Login() {
         </div>
 
         {/* Social Buttons */}
-        <SocialButton icon="bi-line" text="Login with Line" bgColor="#00C300" textColor="white" />
+        <SocialButton icon="bi-line" text="Login with Line" bgColor="#00C300" textColor="white" onClick={handleLineLogin} />
         <SocialButton icon="bi-google" text="Login with Google" variant="outline-secondary" iconColor="text-danger" />
 
         <Divider text="OR CONTINUE WITH EMAIL" />

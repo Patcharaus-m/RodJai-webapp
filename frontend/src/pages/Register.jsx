@@ -34,6 +34,16 @@ export default function Register() {
     }));
   };
 
+  const handleLineLogin = () => {
+  const client_id = '2009308819'; // จากรูป image_538d9d.png [cite: 2026-03-04]
+  const redirect_uri = encodeURIComponent('http://localhost:3000/api/auth/line/callback');
+  const state = 'random_string_123'; // กันการโจมตีแบบ CSRF
+  
+  const lineUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}&scope=profile%20openid%20email`;
+  
+  window.location.href = lineUrl; // พายูสเซอร์ไปหน้า Login ของ LINE
+};
+
   // 3. ฟังก์ชันส่งข้อมูลไปยัง Backend
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +57,7 @@ export default function Register() {
     }
 
     if (formData.username.trim().length > 30){
-      return showAlert("Username mu st be at most 30 characters long.", "error");
+      return showAlert("Username must be at most 30 characters long.", "error");
     }
 
     if (!formData.email.trim()) {
@@ -133,7 +143,8 @@ export default function Register() {
           icon="bi-line" 
           text="Sign up with LINE" 
           bgColor="#00C300" 
-          textColor="white" 
+          textColor="white"
+          onClick={handleLineLogin}
         />
         <SocialButton 
           icon="bi-google" 
