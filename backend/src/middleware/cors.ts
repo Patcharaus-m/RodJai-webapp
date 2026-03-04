@@ -6,6 +6,7 @@ const corsOption: cors.CorsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: [
     "Content-Type",
+    "Authorization",
     "Access-Control-Allow-Origin",
     "Access-Control-Allow-Methods",
   ],

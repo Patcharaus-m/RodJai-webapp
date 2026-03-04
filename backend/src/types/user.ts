@@ -10,8 +10,8 @@ export interface ITerms {
 
 export interface IUser extends Document {
   username: string;
-  email: string;
-  password_hash: string;
+  email?: string | null;
+  password_hash?: string | null;
   line_user_id?: string;
   subscription: 'free' | 'premium';
   created_at: Date;

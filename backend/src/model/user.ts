@@ -4,8 +4,8 @@ import { IUser } from '../types/user'; // Import interface เข้ามาใ
 
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password_hash: { type: String, required: true },
+  email: { type: String, unique: true, sparse: true, default: null },
+  password_hash: { type: String, default: null },
   line_user_id: { type: String, default: null },
   subscription: { type: String, enum: ['free', 'premium'], default: 'free' },
   profile_image: { type: String, default: "" },
@@ -13,7 +13,7 @@ const userSchema = new Schema<IUser>({
     version: { type: String, default: "v1.0" },
     agreed_at: { type: Date, default: Date.now },
     ip_address: { type: String },
-    consent: { type: Boolean, required: true }
+    consent: { type: Boolean, default: false }
   }
 }, { 
   timestamps: { createdAt: 'created_at', updatedAt: false } 

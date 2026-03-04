@@ -29,7 +29,7 @@ export const lineCallback = async (req: any, res: any) => {
     // 3. จัดการ Database [cite: 2026-03-04]
     let user = await User.findOne({ line_user_id: userId });
     if (!user) {
-      user = new User({ username: displayName, line_user_id: userId, profileImage: pictureUrl });
+      user = new User({ username: displayName, line_user_id: userId, profile_image: pictureUrl });
       await user.save();
     }
 
@@ -39,6 +39,7 @@ export const lineCallback = async (req: any, res: any) => {
     // 5. ส่งกลับไปหน้าบ้าน (ใช้ Redirect พายูสเซอร์กลับไป) [cite: 2026-03-04]
     res.redirect(`${process.env.FRONTEND_URL}/login-success?token=${token}`);
   } catch (err) {
+    console.error('LINE Login Error:', err);
     res.redirect(`${process.env.FRONTEND_URL}/login?error=line_failed`);
   }
 };
