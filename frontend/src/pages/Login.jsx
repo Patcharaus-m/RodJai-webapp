@@ -42,6 +42,16 @@ export default function Login() {
   window.location.href = lineUrl; // พายูสเซอร์ไปหน้า Login ของ LINE
 };
 
+const handleGoogleLogin = () => {
+  const clientID = '904698459041-0r0on62f03jgrjntop65cp0s2gqmr2go.apps.googleusercontent.com'; // จากรูป image_e541c9
+  const redirectURI = encodeURIComponent('http://localhost:3000/api/auth/google/callback');
+  const scope = encodeURIComponent('openid profile email');
+  
+  const googleUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scope}&access_type=offline&prompt=select_account`;
+  
+  window.location.href = googleUrl; // ส่งยูสเซอร์ไปหน้า Google [cite: 2026-03-04]
+};
+
   // 3. ฟังก์ชันส่งข้อมูลไป Login
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +114,7 @@ export default function Login() {
 
         {/* Social Buttons */}
         <SocialButton icon="bi-line" text="Login with Line" bgColor="#00C300" textColor="white" onClick={handleLineLogin} />
-        <SocialButton icon="bi-google" text="Login with Google" variant="outline-secondary" iconColor="text-danger" />
+        <SocialButton icon="bi-google" text="Login with Google" variant="outline-secondary" iconColor="text-danger" onClick={handleGoogleLogin} />
 
         <Divider text="OR CONTINUE WITH EMAIL" />
 

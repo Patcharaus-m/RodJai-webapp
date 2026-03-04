@@ -2,6 +2,7 @@ import { IUser } from '../../types/user';
 import { User } from '../../model/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { successRes, errRes } from '../main';
 
 export const login = async (body: any): Promise<ITypeReturnResponse<{ token: string; user: IUser } | null>> => {
   try {
@@ -10,13 +11,8 @@ export const login = async (body: any): Promise<ITypeReturnResponse<{ token: str
     // หา User และดึงข้อมูลมาตรวจสอบ
     const user = await User.findOne({ email });
 
-    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
-      return {
-        code: 401,
-        status: 401,
-        error: "Invalid email or password",
-        payload: null
-      };
+    if (!user || !(await bcrypt.compare(password, user.password_hash!))) {
+      return errRes.UNAUTHORIZED({ message: "Invalid email or password" });
     }
 
     // ออก Token โดยใช้ Secret Key จาก .env
@@ -26,21 +22,11 @@ export const login = async (body: any): Promise<ITypeReturnResponse<{ token: str
       { expiresIn: '1d' }
     );
 
-    return {
-      code: 200,
-      status: 200,
-      error: null,
-      payload: { 
-        token, 
-        user: user.toObject() as IUser
-      }
-    };
+    return successRes({ 
+      token, 
+      user: user.toObject() as IUser
+    });
   } catch (err: any) {
-    return {
-      code: 500,
-      status: 500,
-      error: err.message,
-      payload: null
-    };
+    return errRes.INTERNAL_SERVER_ERROR({ message: err.message });
   }
 };

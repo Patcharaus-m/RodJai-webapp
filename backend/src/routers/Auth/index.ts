@@ -1,10 +1,12 @@
 import { Router } from "express";
 import resFunc from "./resFunc";
-import { lineCallback } from "../../controllers/Auth/LineController";
+import controllers from "../../controllers/Auth";
+
 
 const router = Router();
 
-router.get('/line/callback', lineCallback);
+router.get('/line/callback', controllers.lineCallback);
+router.get('/google/callback', controllers.googleCallback);
 router.post("/register", resFunc.register);
 router.post("/login", resFunc.login);
 

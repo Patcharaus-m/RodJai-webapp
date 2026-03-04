@@ -1,6 +1,7 @@
 import { IUser } from '../../types/user';
 import { User } from '../../model/user';
 import bcrypt from 'bcryptjs';
+import { successRes, errRes } from '../main';
 
 export const register = async (body: any, ip: string): Promise<ITypeReturnResponse<IUser | null>> => {
   try {
@@ -10,79 +11,35 @@ export const register = async (body: any, ip: string): Promise<ITypeReturnRespon
     const normalizedEmail = email.trim().toLowerCase();
     const existingUser = await User.findOne({ $or: [{ email: normalizedEmail }, { username }] });
     if (existingUser) {
-      return {
-        code: 400,
-        status: 400,
-        error: "Username or Email already exists",
-        payload: null
-      };
+      return errRes.BAD_REQUEST({ message: "Username or Email already exists" });
     }
     if (!username || !username.trim()) {
-      return {
-        code: 400, error: "Please enter your username.",
-        status: 400,
-        payload: null
-      };
+      return errRes.BAD_REQUEST({ message: "Please enter your username." });
     }
     if (username.trim().length < 3){
-      return {
-        code: 400,
-        error: "Username must be at least 3 characters long.",
-        status: 400,
-        payload: null
-      };
+      return errRes.BAD_REQUEST({ message: "Username must be at least 3 characters long." });
     }
     if (username.trim().length > 30){
-      return {
-        code: 400,
-        error: "Username must be at most 30 characters long.",
-        status: 400,
-        payload: null
-      };
+      return errRes.BAD_REQUEST({ message: "Username must be at most 30 characters long." });
     }
     if (!email || !email.trim()){
-      return {
-        code: 400,
-        error: "Please enter your email.",
-        status: 400,
-        payload: null
-      };
+      return errRes.BAD_REQUEST({ message: "Please enter your email." });
     }
 
     if (!password || !password.trim()){
-      return {
-        code: 400,
-        error: "Please enter your password.",
-        status: 400,
-        payload: null
-      }
+      return errRes.BAD_REQUEST({ message: "Please enter your password." });
     }
 
     if (password.length < 6){
-      return {
-        code: 400,
-        status: 400,
-        error: "Password must be at least 6 characters long.",
-        payload: null
-      }
+      return errRes.BAD_REQUEST({ message: "Password must be at least 6 characters long." });
     }
 
     if (password.length > 30){
-      return {
-        code: 400,
-        status: 400,
-        error: "Password must be at most 30 characters long.",
-        payload: null
-      }
+      return errRes.BAD_REQUEST({ message: "Password must be at most 30 characters long." });
     }
 
     if (!consent){
-      return {
-        code: 400,
-        status: 400,
-        error: "Please agree to the Terms of Service.",
-        payload: null
-      }
+      return errRes.BAD_REQUEST({ message: "Please agree to the Terms of Service." });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -99,18 +56,8 @@ export const register = async (body: any, ip: string): Promise<ITypeReturnRespon
 
     const savedUser = await newUser.save();
     
-    return {
-      code: 201,
-      status: 201,
-      error: null,
-      payload: savedUser.toObject() as IUser
-    };
+    return successRes(savedUser.toObject() as IUser);
   } catch (err: any) {
-    return {
-      code: 500,
-      status: 500,
-      error: err.message,
-      payload: null
-    };
+    return errRes.INTERNAL_SERVER_ERROR({ message: err.message });
   }
 };
