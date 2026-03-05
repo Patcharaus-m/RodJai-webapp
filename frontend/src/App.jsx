@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import LoginSuccess from './components/Login/LoginSuccess';
+import AddDevice from './pages/AddDevice';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login-success" element={<LoginSuccess />} />
+      <Route path="/add-device" element={<AddDevice />} />
     </Routes>
   );
 }
