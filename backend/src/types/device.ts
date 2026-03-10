@@ -8,16 +8,17 @@ export interface IDevice extends Document {
   connectivity?: {
     ssid?: string;
   };
-  is_online?: boolean;
-  battery_level?: number;
-  plants_info?: string;
-  config?: {
-    mode?: number;
-    target_moisture?: number;
-    timer_start_hour?: number;
-    timer_start_min?: number;
-    timer_duration_min?: number;
+  is_online: boolean;
+  last_seen: Date | null;
+  battery_level: number;
+  plants_info: string;
+  config: {
+    mode: number;
+    target_moisture: number;
+    timer_start_hour: number;
+    timer_start_min: number;
+    timer_duration_min: number;
   };
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

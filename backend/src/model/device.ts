@@ -13,6 +13,7 @@ const deviceSchema = new mongoose.Schema<IDevice>({
   
   // ข้อมูลพื้นฐานที่โชว์บนแอป
   is_online: { type: Boolean, default: false },
+  last_seen: { type: Date, default: null },
   battery_level: { type: Number, default: 100 }, // สมมติว่าในอนาคตมีแบตเตอรี่
   plants_info: { type: String, default: "Not specified" },
 

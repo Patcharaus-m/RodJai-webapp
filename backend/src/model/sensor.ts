@@ -24,7 +24,7 @@ const sensorDataSchema = new mongoose.Schema<ISensor>({
   timestamps: true // เวลาที่บันทึกข้อมูล (สำคัญมากสำหรับการทำกราฟ)
 });
 
-// แนะนำ: ถ้าระบบใหญ่ขึ้น อาจต้องตั้ง TTL (Time-To-Live) index เพื่อลบข้อมูลเก่าๆ ทิ้งอัตโนมัติ
-// sensorDataSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 }); // ลบข้อมูลที่เก่ากว่า 30 วัน
+// ตั้ง TTL (Time-To-Live) index เพื่อลบข้อมูลเก่าๆ ทิ้งอัตโนมัติ (ลบข้อมูลที่เก่ากว่า 30 วัน)
+sensorDataSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 }); 
 
 export const SensorData = mongoose.model('SensorData', sensorDataSchema);

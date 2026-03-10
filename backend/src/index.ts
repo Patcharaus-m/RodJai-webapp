@@ -5,6 +5,8 @@ import middleware from "./middleware";
 import authRouter from "./routers/Auth";
 import userRouter from "./routers/User";
 import dataRouter from "./routers/Data";
+import deviceRouter from "./routers/Device";
+import { startMQTT } from "./workers/mqttWorker";
 
 const app = express();
 const { HOST_API_PORT } = config;
@@ -13,12 +15,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 connectDB();
 
-
 app.get("/", (req, res) => res.send("ยินดีต้อนรับสู่ API"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/data", dataRouter);
+app.use("/api/device", deviceRouter);
+
+// Start MQTT Listener
+startMQTT();
 
 app.listen(HOST_API_PORT, () => {
   console.log(`Server is running on port ${HOST_API_PORT}`);

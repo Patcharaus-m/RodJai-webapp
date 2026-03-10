@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../components/Home/Header';
 import WeatherCard from '../components/Home/WeatherCard';
 import DeviceCard from '../components/Home/DeviceCard';
@@ -7,9 +8,31 @@ import EmptyState from '../components/Home/EmptyState'; // import กลับ�
 import BottomNav from '../components/Home/BottomNav';
 import { Plus } from 'react-bootstrap-icons';
 
+const API_BASE = 'http://localhost:3000/api';
+
 const HomePage = () => {
-  // สมมติว่าดึงข้อมูลมาจาก API ถ้า [] คือไม่มีอุปกรณ์
   const [devices, setDevices] = useState([]); 
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await axios.get(`${API_BASE}/device/user`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.status) {
+          setDevices(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching devices:', error);
+      }
+    };
+
+    fetchDevices();
+  }, []);
 
   return (
     <div style={{ backgroundColor: '#f8f9fa' }}>
