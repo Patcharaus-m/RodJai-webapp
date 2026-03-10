@@ -63,3 +63,33 @@ export const startMQTT = () => {
         console.error('MQTT Connection Error:', err);
     });
 };
+
+import cron from 'node-cron';
+
+// Run every minute to check for offline devices
+cron.schedule('* * * * *', async () => {
+    try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000); // 5 minutes threshold
+        
+        // Find devices that are marked online but haven't updated in 5 minutes
+        // Or devices where last_seen is null but are marked online
+        const updated = await Device.updateMany(
+            { 
+                is_online: true, 
+                $or: [
+                    { last_seen: { $lt: fiveMinutesAgo } },
+                    { last_seen: null }
+                ]
+            },
+            { 
+                $set: { is_online: false } 
+            }
+        );
+        
+        if (updated.modifiedCount > 0) {
+            console.log(`🔌 Marked ${updated.modifiedCount} devices as offline (no signal for 5 minutes)`);
+        }
+    } catch (err) {
+        console.error('❌ Error in offline checker cron:', err);
+    }
+});
