@@ -4,6 +4,7 @@ import { connectDB } from "./database";
 import middleware from "./middleware";
 import authRouter from "./routers/Auth";
 import userRouter from "./routers/User";
+import dataRouter from "./routers/Data";
 
 const app = express();
 const { HOST_API_PORT } = config;
@@ -17,6 +18,7 @@ app.get("/", (req, res) => res.send("ยินดีต้อนรับสู�
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/data", dataRouter);
 
 app.listen(HOST_API_PORT, () => {
   console.log(`Server is running on port ${HOST_API_PORT}`);

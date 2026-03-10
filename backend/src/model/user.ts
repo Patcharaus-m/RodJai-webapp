@@ -1,6 +1,6 @@
 // src/models/User.ts
 import { Schema, model } from 'mongoose';
-import { IUser } from '../types/user'; // Import interface เข้ามาใช้
+import { IUser } from '../types/user';
 
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
