@@ -1,8 +1,12 @@
 import { Card, Row, Col } from 'react-bootstrap';
 import { Tree } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 
-const DeviceCard = ({ devices = [] }) => (
-  <div className="px-3 mt-4">
+const DeviceCard = ({ devices = [] }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="px-3 mt-4">
     <div className="d-flex justify-content-between align-items-center mb-3">
       <h6 className="fw-bold mb-0">My Devices</h6>
       {devices.length > 2 && <small className="text-success fw-bold" style={{ cursor: 'pointer' }}>See all</small>}
@@ -10,7 +14,11 @@ const DeviceCard = ({ devices = [] }) => (
     <div className="row g-3">
       {devices.map((device, index) => (
         <div className="col-6" key={device._id || index}>
-          <Card className="border-0 shadow-sm rounded-4 h-100">
+          <Card 
+            className="border-0 shadow-sm rounded-4 h-100" 
+            onClick={() => navigate('/greenhouse-dashboard')}
+            style={{ cursor: 'pointer' }}
+          >
             <Card.Body className="p-3">
               <div className="d-flex justify-content-between align-items-start mb-3">
                  <div className="p-2 rounded-circle" style={{ backgroundColor: '#f0f7e9' }}>
@@ -34,6 +42,7 @@ const DeviceCard = ({ devices = [] }) => (
       ))}
     </div>
   </div>
-);
+  );
+};
 
 export default DeviceCard;
